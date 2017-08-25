@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Pokedex</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="Pokedex.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                for (var i=1; i<152; i++){
+                    $("#sprites").append('<img id='+i+' src="http://pokeapi.co/media/img/'+i+'.png">');
+                };
+                $("#types, #weight").siblings().hide();
+                $("img").click(function(){
+                    var pokenumber = $(this).attr("id")
+                    $.get("http://pokeapi.co/api/v1/pokemon/"+pokenumber+"/", function(pokemon){
+                        $("#name").text(pokemon.name);
+                        console.log($(this).attr("id"));
+                        $("#image").html('<img src="http://pokeapi.co/media/img/'+pokenumber+'.png">');
+                        $("#types, #weight").siblings().show();
+                        $("#types").html("<li>"+pokemon.types[0].name+"</li>");
+                        for (var i=1; i<pokemon.types.length; i++){
+                            $("#types").append("<li>"+pokemon.types[i].name+"</li>");
+                        }
+                        $("#weight").text(pokemon.weight);
+                    }, "json");
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div id="sprites">
+        </div>
+        <div id="pokedex">
+            <p id="name"></p>
+            <div id="image"></div>
+            <div>
+                <p>Types</p>
+                <ul id="types"></ul>
+            </div>
+            <div>
+                <p>Weight</p>
+                <p id="weight"></p>
+            </div>
+        </div>
+    </body>
+</html>
